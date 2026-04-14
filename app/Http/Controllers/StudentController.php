@@ -44,9 +44,16 @@ return view('student.index', ['students' => $students ]);
      */
     public function edit(string $id)
     {
-        //
-    }
+        $student = Student::where(['nim' => $id]);
+        if ($student->count() <1) {
+            return redirect('/student')->with([
+                'notifikasi' => 'Data siswa tidak ditemukan !',
+                'type' => 'error'
+            ]);
+        }
 
+        return view('student.edit', ['student' => $student->first() ]);
+    }
     /**
      * Update the specified resource in storage.
      */
