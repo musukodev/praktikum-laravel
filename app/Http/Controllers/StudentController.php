@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Student;
 use Illuminate\Http\Request;
-
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+/**
+* Display a listing of the resource.
+*/
+public function index()
+{
+// Memanggil seluruh data dari table Student
+$students = Student::all();
+return view('student.index', ['students' => $students ]);
+}
 
     /**
      * Show the form for creating a new resource.
