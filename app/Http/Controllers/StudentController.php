@@ -5,22 +5,22 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 class StudentController extends Controller
 {
-/**
-* Display a listing of the resource.
-*/
-public function index()
-{
-// Memanggil seluruh data dari table Student
-$students = Student::all();
-return view('student.index', ['students' => $students ]);
-}
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        // Memanggil seluruh data dari table Student
+        $students = Student::all();
+        return view('student.index', ['students' => $students]);
+    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return view('student.create');
     }
 
     /**
@@ -45,14 +45,14 @@ return view('student.index', ['students' => $students ]);
     public function edit(string $id)
     {
         $student = Student::where(['nim' => $id]);
-        if ($student->count() <1) {
+        if ($student->count() < 1) {
             return redirect('/student')->with([
                 'notifikasi' => 'Data siswa tidak ditemukan !',
-                'type' => 'error'
+                'type' => 'error',
             ]);
         }
 
-        return view('student.edit', ['student' => $student->first() ]);
+        return view('student.edit', ['student' => $student->first()]);
     }
     /**
      * Update the specified resource in storage.
