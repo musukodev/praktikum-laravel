@@ -67,6 +67,23 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+     $student = Student::where(['nim' => $id]); 
+        if ($student->count() < 1) { 
+            return redirect('/student')->with([ 
+                'notifikasi' => 'Data siswa tidak ditemukan !', 
+                'type' => 'error' 
+            ]); 
+        } 
+        if ( $student->first()->delete()) { 
+            return redirect('/student')->with([ 
+                'notifikasi' => 'Data Berhasil dihapus !', 
+                'type' => 'success' 
+            ]); 
+        } else { 
+            return redirect()->back()->with([ 
+                    'notifikasi' => 'Data gagal dihapus !', 
+                    'type' => 'error' 
+                ]); 
+        } 
     }
 }
