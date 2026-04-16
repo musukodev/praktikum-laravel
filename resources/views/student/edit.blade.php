@@ -25,11 +25,11 @@ right">Kembali</a>
                     <input name="old_nim" hidden value="{{ $student->nim }}" />
                     <div class="card-body">
                         @if(session('notifikasi'))
-                            <div class="form-group">
-                                <div class="alert alert-{{ session('type') }}">
-                                    {{ session('notifikasi') }}
-                                </div>
+                        <div class="form-group">
+                            <div class="alert alert-{{ session('type') }}">
+                                {{ session('notifikasi') }}
                             </div>
+                        </div>
                         @endif
                         <div class="form-group">
                             <label for="nama">NIM <b class="text-danger">*</b></label>
@@ -37,7 +37,7 @@ right">Kembali</a>
                                 class="form-control @error('nim') is-invalid @enderror"
                                 value="{{ old('nim', $student->nim) }}">
                             @error('nim')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
@@ -47,7 +47,7 @@ right">Kembali</a>
                                 class="form-control @error('nama') is-invalid @enderror"
                                 value="{{ old('nama', $student->nama) }}">
                             @error('nama')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -57,7 +57,7 @@ right">Kembali</a>
                                 value="{{ old('email', $student->email) }}">
 
                             @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -66,21 +66,21 @@ right">Kembali</a>
                                 class="form-control @error('prodi') is-invalid @enderror" required>
                                 <option value="">- Pilih Prodi</option>
                                 <option @if (
-                                        old('prodi', $student->prodi) == 'Teknik
-                                                                                                                Informatika'
+                                    old('prodi', $student->prodi) == 'Teknik
+                                    Informatika'
                                     ) {{ 'selected' }}
-                                @endif Teknik Informatika</option>
+                                    @endif >Teknik Informatika</option>
                                 <option @if (
                                     old('prodi', $student->prodi) == 'Teknik Rekayasa
-                                                                                                    Keamanan Siber'
-                                ) {{ 'selected' }} @endif>Teknik Rekayasa Keamanan Siber</option>
+                                    Keamanan Siber'
+                                    ) {{ 'selected' }} @endif>Teknik Rekayasa Keamanan Siber</option>
                                 <option @if (
                                     old('prodi', $student->prodi) == 'Teknik Rekayasa
-                                                                                                    Perangkat Lunak'
-                                ) {{ 'selected' }} @endif>Teknik Rekayasa Perangkat Lunak</option>
+                                    Perangkat Lunak'
+                                    ) {{ 'selected' }} @endif>Teknik Rekayasa Perangkat Lunak</option>
                             </select>
                             @error('prodi')
-                                <div class="invalid-feedback">{{ $message }}</div>
+                            <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
