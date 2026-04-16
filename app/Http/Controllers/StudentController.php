@@ -81,12 +81,46 @@ class StudentController extends Controller
 
         return view('student.edit', ['student' => $student->first()]);
     }
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
+     /** 
+     * Update the specified resource in storage. 
+     */ 
+    public function update(Request $request, string $id) 
+    { 
+        // ddd($request->old_nim, $request->nim); 
+        $validatedData = $request->validate([ 
+            'nim' => [ 
+                'required', 
+                'unique:students,nim,' . $request->old_nim . ',nim', 
+            ], 
+            'nama' => 'required', 
+            'email' => 'required|email', 
+            'prodi' => 'required' 
+        ], [ 
+            'nim.required' => 'NIM harus diisi.', 
+            'nim.unique' => 'NIM sudah digunakan.', 
+            'nama.required' => 'Nama harus diisi.', 
+            'email.required' => 'Email harus diisi.', 
+            'email.email' => 'Format email tidak valid.', 
+            'prodi.required' => 'Program studi harus diisi.' 
+        ]); 
+ 
+        $student = Student::where('nim', $id)->first(); 
+        $student->nim = $request->nim; 
+        $student->nama = $request->nama; 
+        $student->email = $request->email; 
+        $student->prodi = $request->prodi; 
+ 
+        if ($student->save()) { 
+            return redirect('/student')->with([ 
+                'notifikasi' => 'Data Berhasil diedit !', 
+                'type' => 'success' 
+            ]); 
+        } else { 
+            return redirect()->back()->with([ 
+                    'notifikasi' => 'Data gagal diedit !', 
+                    'type' => 'error' 
+                ]); 
+        } 
     }
 
     /**
