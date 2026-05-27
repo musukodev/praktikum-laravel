@@ -20,7 +20,7 @@ to-fit=no">
                     <a href="/student" type="button" class="btn btn-danger float-
 right">Kembali</a>
                 </div>
-                <form action="/student/add" method="POST">
+                <form action="/student/add" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         @if (session('notifikasi'))
@@ -75,6 +75,14 @@ danger">*</b></label>
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="foto">Upload Foto <b class="text-danger">*</b></label>
+                            <input required type="file" id="foto" name="foto"
+                                class="form-control @error('foto') is-invalid @enderror">
+                            @error('foto')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
                     <div class="card-footer">
                         <a href="/student" class="btn btn-danger">Batal</a>
@@ -94,6 +102,28 @@ success">Simpan</button>
     UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-
     JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $('#foto').on('change', function() {
+                var file = this.files[0];
+                var allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                var maxSize = 2 * 1024 * 1024; // 2MB
+
+                if (file) {
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Tipe file harus JPEG, JPG, atau PNG!');
+                        $(this).val('');
+                        return;
+                    }
+                    if (file.size > maxSize) {
+                        alert('Ukuran file maksimal 2 MB!');
+                        $(this).val('');
+                        return;
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

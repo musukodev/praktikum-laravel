@@ -31,6 +31,7 @@
                                 <td>NIM</td>
                                 <td>Nama</td>
                                 <td>Prodi</td>
+                                <td>Foto</td>
                                 <td>#</td>
                             </thead>
                             <tbody>
@@ -41,6 +42,13 @@
                                     <td>{{ $data->nama }}</td>
                                     <td>{{ $data->prodi }}</td>
                                     <td>
+                                        @if($data->foto)
+                                            <img src="{{ asset('storage/students/'.$data->foto) }}" alt="Foto" width="100">
+                                        @else
+                                            <span>Tidak ada foto</span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         <a href="/student/edit/{{ $data->nim }}" class="btn
 btn-sm btn-warning mr-1"><i class="bi bi-search"></i>Edit</a>
                                         <form method="POST" action="/student/delete/{{
@@ -49,6 +57,10 @@ $data->nim }}">
                                             <button type="submit"
                                                 class="btn btn-sm btn-danger mr-1">Hapus</button>
                                         </form>
+                                        @if($data->foto)
+                                        <a href="{{ route('student.download', $data->nim) }}" class="btn btn-sm btn-success mr-1">Download</a>
+                                        <a href="{{ route('student.preview', $data->nim) }}" class="btn btn-sm btn-info mr-1" target="_blank">Preview</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @empty

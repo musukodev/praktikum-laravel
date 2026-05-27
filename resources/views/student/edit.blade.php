@@ -20,7 +20,7 @@
                     <a href="/student" type="button" class="btn btn-danger float-
 right">Kembali</a>
                 </div>
-                <form action="/student/edit/{{ $student->nim }}" method="POST">
+                <form action="/student/edit/{{ $student->nim }}" method="POST" enctype="multipart/form-data">
                     @csrf @method('PUT')
                     <input name="old_nim" hidden value="{{ $student->nim }}" />
                     <div class="card-body">
@@ -84,6 +84,30 @@ right">Kembali</a>
                             @enderror
                         </div>
 
+                        <div class="form-group">
+                            <label>Foto Lama</label><br>
+                            @if($student->foto)
+                                <img src="{{ asset('storage/students/'.$student->foto) }}" alt="Foto Lama" width="150">
+                            @else
+                                <span>Tidak ada foto</span>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label>Ganti Foto?</label>
+                            <select id="ganti_foto" class="form-control" style="width:200px">
+                                <option value="tidak">Tidak</option>
+                                <option value="ya">Ya</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="kolom_foto_baru" style="display:none">
+                            <label for="foto">Foto Baru</label>
+                            <input type="file" id="foto" name="foto"
+                                class="form-control @error('foto') is-invalid @enderror">
+                            @error('foto')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
                     </div>
                     <div class="card-footer">
                         <a href="/student" class="btn btn-danger">Batal</a>
@@ -103,6 +127,37 @@ U02eT@CpHqdSJQ6hJty5KVphtPhzWj9W01c1HTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="a
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-
 JjSmVgyd@p3pXB1rRibZUAYoIIy60rQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            $('#ganti_foto').on('change', function() {
+                if ($(this).val() == 'ya') {
+                    $('#kolom_foto_baru').show();
+                } else {
+                    $('#kolom_foto_baru').hide();
+                    $('#foto').val('');
+                }
+            });
+
+            $('#foto').on('change', function() {
+                var file = this.files[0];
+                var allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                var maxSize = 2 * 1024 * 1024; // 2MB
+
+                if (file) {
+                    if (!allowedTypes.includes(file.type)) {
+                        alert('Tipe file harus JPEG, JPG, atau PNG!');
+                        $(this).val('');
+                        return;
+                    }
+                    if (file.size > maxSize) {
+                        alert('Ukuran file maksimal 2 MB!');
+                        $(this).val('');
+                        return;
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

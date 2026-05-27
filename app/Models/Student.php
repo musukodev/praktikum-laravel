@@ -13,6 +13,6 @@ class Student extends Model
 
     protected $table = 'students';
 
-    protected $fillable=array('nim','nama','email','prodi');
+    protected $fillable=array('nim','nama','email','prodi','foto');
     
 }

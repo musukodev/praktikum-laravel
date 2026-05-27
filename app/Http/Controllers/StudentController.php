@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -31,20 +32,29 @@ class StudentController extends Controller
             'nim' => 'required|unique:students,nim',
             'nama' => 'required',
             'email' => 'required|email',
-            'prodi' => 'required'
+            'prodi' => 'required',
+            'foto' => 'required|mimes:jpeg,jpg,png|max:2048'
         ], [
             'nim.required' => 'NIM harus diisi.',
             'nim.unique' => 'NIM sudah digunakan.',
             'nama.required' => 'Nama harus diisi.',
             'email.required' => 'Email harus diisi.',
             'email.email' => 'Format email tidak valid.',
-            'prodi.required' => 'Program studi harus diisi.'
+            'prodi.required' => 'Program studi harus diisi.',
+            'foto.required' => 'Foto harus diupload.',
+            'foto.mimes' => 'Tipe file harus JPEG, JPG, atau PNG.',
+            'foto.max' => 'Ukuran file maksimal 2 MB.'
         ]);
+
+        $fileName = time() . '_' . $request->file('foto')->getClientOriginalName();
+        $request->file('foto')->storeAs('public/students', $fileName);
+
         $students = new Student();
         $students->nim = $request->nim;
         $students->nama = $request->nama;
         $students->email = $request->email;
         $students->prodi = $request->prodi;
+        $students->foto = $fileName;
         if ($students->save()) {
             return redirect('/student')->with([
                 'notifikasi' => 'Data Berhasil disimpan !',
@@ -86,7 +96,6 @@ class StudentController extends Controller
      */ 
     public function update(Request $request, string $id) 
     { 
-        // ddd($request->old_nim, $request->nim); 
         $validatedData = $request->validate([ 
             'nim' => [ 
                 'required', 
@@ -94,14 +103,17 @@ class StudentController extends Controller
             ], 
             'nama' => 'required', 
             'email' => 'required|email', 
-            'prodi' => 'required' 
+            'prodi' => 'required',
+            'foto' => 'nullable|mimes:jpeg,jpg,png|max:2048'
         ], [ 
             'nim.required' => 'NIM harus diisi.', 
             'nim.unique' => 'NIM sudah digunakan.', 
             'nama.required' => 'Nama harus diisi.', 
             'email.required' => 'Email harus diisi.', 
             'email.email' => 'Format email tidak valid.', 
-            'prodi.required' => 'Program studi harus diisi.' 
+            'prodi.required' => 'Program studi harus diisi.',
+            'foto.mimes' => 'Tipe file harus JPEG, JPG, atau PNG.',
+            'foto.max' => 'Ukuran file maksimal 2 MB.'
         ]); 
  
         $student = Student::where('nim', $id)->first(); 
@@ -109,6 +121,17 @@ class StudentController extends Controller
         $student->nama = $request->nama; 
         $student->email = $request->email; 
         $student->prodi = $request->prodi; 
+
+        if ($request->hasFile('foto')) {
+            // Hapus foto lama
+            if ($student->foto) {
+                Storage::delete('public/students/' . $student->foto);
+            }
+            // Upload foto baru
+            $fileName = time() . '_' . $request->file('foto')->getClientOriginalName();
+            $request->file('foto')->storeAs('public/students', $fileName);
+            $student->foto = $fileName;
+        }
  
         if ($student->save()) { 
             return redirect('/student')->with([ 
@@ -135,7 +158,11 @@ class StudentController extends Controller
                 'type' => 'error'
             ]);
         }
-        if ($student->first()->delete()) {
+        $data = $student->first();
+        if ($data->foto) {
+            Storage::delete('public/students/' . $data->foto);
+        }
+        if ($data->delete()) {
             return redirect('/student')->with([
                 'notifikasi' => 'Data Berhasil dihapus !',
                 'type' => 'success'
@@ -146,5 +173,19 @@ class StudentController extends Controller
                 'type' => 'error'
             ]);
         }
+    }
+
+    public function download(string $id)
+    {
+        $student = Student::where('nim', $id)->first();
+        $filePath = storage_path('app/public/students/' . $student->foto);
+        return response()->download($filePath);
+    }
+
+    public function preview(string $id)
+    {
+        $student = Student::where('nim', $id)->first();
+        $filePath = storage_path('app/public/students/' . $student->foto);
+        return response()->file($filePath);
     }
 }
