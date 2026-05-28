@@ -17,8 +17,7 @@ to-fit=no">
             <div class="card">
                 <div class="card-header">
                     Tambah Siswa
-                    <a href="/student" type="button" class="btn btn-danger float-
-right">Kembali</a>
+                    <a href="/student" type="button" class="btn btn-danger float- right">Kembali</a>
                 </div>
                 <form action="/student/add" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -31,8 +30,7 @@ right">Kembali</a>
                             </div>
                         @endif
                         <div class="form-group">
-                            <label for="nama">NIM <b class="text-
-danger">*</b></label>
+                            <label for="nama">NIM <b class="text- danger">*</b></label>
                             <input required placeholder="Masukkan NIM" type="text" id="nim" name="nim"
                                 class="form-control @error('nim') is-invalid
 @enderror" value="{{ old('nim') }}">
@@ -41,8 +39,7 @@ danger">*</b></label>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="nama">Nama <b class="text-
-danger">*</b></label>
+                            <label for="nama">Nama <b class="text- danger">*</b></label>
                             <input required placeholder="Masukkan Nama" type="text" id="nama" name="nama"
                                 class="form-control @error('nama') is-invalid
 @enderror" value="{{ old('nama') }}">
@@ -51,8 +48,7 @@ danger">*</b></label>
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="nama">E-Mail <b class="text-
-danger">*</b></label>
+                            <label for="nama">E-Mail <b class="text- danger">*</b></label>
                             <input required placeholder="Masukkan E-Mail" type="email" id="email" name="email"
                                 class="form-control @error('email') is-
 invalid @enderror" value="{{ old('email') }}">
@@ -61,8 +57,15 @@ invalid @enderror" value="{{ old('email') }}">
                             @enderror
                         </div>
                         <div class="form-group">
-                            <label for="nama">Prodi <b class="text-
-danger">*</b></label>
+                            <label for="foto">Upload Foto <b class="text-danger">*</b></label>
+                            <input required type="file" id="foto" name="foto"
+                                class="form-control @error('foto') is-invalid @enderror">
+                            @error('foto')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="nama">Prodi <b class="text- danger">*</b></label>
                             <select required id="prodi" name="prodi"
                                 class="form-control @error('prodi') is-invalid
 @enderror" required>
@@ -75,34 +78,28 @@ danger">*</b></label>
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="form-group">
-                            <label for="foto">Upload Foto <b class="text-danger">*</b></label>
-                            <input required type="file" id="foto" name="foto"
-                                class="form-control @error('foto') is-invalid @enderror">
-                            @error('foto')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
+
                     </div>
                     <div class="card-footer">
                         <a href="/student" class="btn btn-danger">Batal</a>
-                        <button type="reset" class="btn btn-
-warning">Reset</button>
-                        <button type="submit" class="btn btn-
-success">Simpan</button>
+                        <button type="reset" class="btn btn- warning">Reset</button>
+                        <button type="submit" class="btn btn- success">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-
-    q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-
-    UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-
-    JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    {{-- <script>
         $(document).ready(function() {
             $('#foto').on('change', function() {
                 var file = this.files[0];
@@ -123,7 +120,7 @@ success">Simpan</button>
                 }
             });
         });
-    </script>
+    </script> --}}
 </body>
 
 </html>

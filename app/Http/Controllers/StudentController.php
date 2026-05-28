@@ -46,15 +46,19 @@ class StudentController extends Controller
             'foto.max' => 'Ukuran file maksimal 2 MB.'
         ]);
 
-        $fileName = time() . '_' . $request->file('foto')->getClientOriginalName();
-        $request->file('foto')->storeAs('public/students', $fileName);
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto')->store('students', 'public');
+            $foto = basename($foto);
+        } else {
+            $foto = null;
+        }
 
         $students = new Student();
         $students->nim = $request->nim;
         $students->nama = $request->nama;
         $students->email = $request->email;
         $students->prodi = $request->prodi;
-        $students->foto = $fileName;
+        $students->foto = $foto;
         if ($students->save()) {
             return redirect('/student')->with([
                 'notifikasi' => 'Data Berhasil disimpan !',
@@ -62,9 +66,9 @@ class StudentController extends Controller
             ]);
         } else {
             return redirect()->back()->with([
-                    'notifikasi' => 'Data gagal disimpan !',
-                    'type' => 'error'
-                ]);
+                'notifikasi' => 'Data gagal disimpan !',
+                'type' => 'error'
+            ]);
         }
     }
 
@@ -91,36 +95,36 @@ class StudentController extends Controller
 
         return view('student.edit', ['student' => $student->first()]);
     }
-     /** 
+    /** 
      * Update the specified resource in storage. 
-     */ 
-    public function update(Request $request, string $id) 
-    { 
-        $validatedData = $request->validate([ 
-            'nim' => [ 
-                'required', 
-                'unique:students,nim,' . $request->old_nim . ',nim', 
-            ], 
-            'nama' => 'required', 
-            'email' => 'required|email', 
+     */
+    public function update(Request $request, string $id)
+    {
+        $validatedData = $request->validate([
+            'nim' => [
+                'required',
+                'unique:students,nim,' . $request->old_nim . ',nim',
+            ],
+            'nama' => 'required',
+            'email' => 'required|email',
             'prodi' => 'required',
             'foto' => 'nullable|mimes:jpeg,jpg,png|max:2048'
-        ], [ 
-            'nim.required' => 'NIM harus diisi.', 
-            'nim.unique' => 'NIM sudah digunakan.', 
-            'nama.required' => 'Nama harus diisi.', 
-            'email.required' => 'Email harus diisi.', 
-            'email.email' => 'Format email tidak valid.', 
+        ], [
+            'nim.required' => 'NIM harus diisi.',
+            'nim.unique' => 'NIM sudah digunakan.',
+            'nama.required' => 'Nama harus diisi.',
+            'email.required' => 'Email harus diisi.',
+            'email.email' => 'Format email tidak valid.',
             'prodi.required' => 'Program studi harus diisi.',
             'foto.mimes' => 'Tipe file harus JPEG, JPG, atau PNG.',
             'foto.max' => 'Ukuran file maksimal 2 MB.'
-        ]); 
- 
-        $student = Student::where('nim', $id)->first(); 
-        $student->nim = $request->nim; 
-        $student->nama = $request->nama; 
-        $student->email = $request->email; 
-        $student->prodi = $request->prodi; 
+        ]);
+
+        $student = Student::where('nim', $id)->first();
+        $student->nim = $request->nim;
+        $student->nama = $request->nama;
+        $student->email = $request->email;
+        $student->prodi = $request->prodi;
 
         if ($request->hasFile('foto')) {
             // Hapus foto lama
@@ -128,22 +132,22 @@ class StudentController extends Controller
                 Storage::delete('public/students/' . $student->foto);
             }
             // Upload foto baru
-            $fileName = time() . '_' . $request->file('foto')->getClientOriginalName();
-            $request->file('foto')->storeAs('public/students', $fileName);
-            $student->foto = $fileName;
+            $foto = $request->file('foto')->store('students', 'public');
+            $foto = basename($foto);
+            $student->foto = $foto;
         }
- 
-        if ($student->save()) { 
-            return redirect('/student')->with([ 
-                'notifikasi' => 'Data Berhasil diedit !', 
-                'type' => 'success' 
-            ]); 
-        } else { 
-            return redirect()->back()->with([ 
-                    'notifikasi' => 'Data gagal diedit !', 
-                    'type' => 'error' 
-                ]); 
-        } 
+
+        if ($student->save()) {
+            return redirect('/student')->with([
+                'notifikasi' => 'Data Berhasil diedit !',
+                'type' => 'success'
+            ]);
+        } else {
+            return redirect()->back()->with([
+                'notifikasi' => 'Data gagal diedit !',
+                'type' => 'error'
+            ]);
+        }
     }
 
     /**
